@@ -3,242 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recetas de Siham - Libro Digital de Cocina</title>
-    
+    <title>Recetas de Siham - Menú y Especialidades</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        amber: {
-                            50: '#fffbe1',
-                            100: '#fef3c7',
-                            800: '#92400e',
-                            900: '#78350f',
-                        },
-                        terracotta: '#c85a32',
-                        warmgold: '#d4a373',
-                        deepcharcoal: '#1b1512',
-                        cardbg: '#fdfbf7',
+                        'chef-red': '#c85a32',
+                        'chef-gold': '#d4a373',
+                        'chef-dark': '#1b1512',
+                        'chef-bg': '#fbf9f5',
+                        'card-bg': '#ffffff'
                     },
                     fontFamily: {
-                        serif: ['Playfair Display', 'serif'],
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        'serif': ['Amiri', 'serif'],
+                        'sans': ['Plus Jakarta Sans', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-
     <style>
-        /* Smooth transition for slide pages */
         .page-slide {
             display: none;
-            opacity: 0;
-            transition: opacity 0.35s ease-in-out;
         }
         .page-slide.active {
             display: block;
-            opacity: 1;
-        }
-
-        /* Custom Scrollbar for Recipe Cards */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1ebd9;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d4a373;
-            border-radius: 4px;
-        }
-
-        /* Custom image placeholder styling when local image is missing */
-        img {
-            object-fit: cover;
-            background-color: #eaddca;
-        }
-
-        /* Recipe step numbers style */
-        .step-number {
-            background-color: #c85a32;
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
-            flex-shrink: 0;
         }
     </style>
 </head>
-<body class="bg-[#f4f1ea] text-[#2c2420] font-sans min-h-screen flex flex-col justify-between selection:bg-[#d4a373] selection:text-white">
+<body class="bg-chef-bg font-sans text-chef-dark min-h-screen flex flex-col justify-between">
 
-    <header class="sticky top-0 z-40 bg-[#1b1512]/95 backdrop-blur-md text-white border-b border-[#d4a373]/30 px-4 py-3 shadow-lg">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Book Logo / Title -->
-            <button onclick="goToPage(1)" class="flex items-center gap-3 group text-left focus:outline-none">
-                <span class="w-9 h-9 rounded-full bg-[#c85a32] flex items-center justify-center text-white font-serif font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
-                    S
+    <!-- Header / Navbar Principal -->
+    <header class="bg-chef-dark text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="goToPage(1)">
+                <span class="bg-chef-red text-white p-2 rounded-full flex items-center justify-center w-10 h-10">
+                    <i class="fa-solid fa-utensils"></i>
                 </span>
                 <div>
-                    <h1 class="font-serif font-bold text-lg md:text-xl tracking-wide text-white group-hover:text-[#d4a373] transition-colors">Recetas de Siham</h1>
-                    <p class="text-xs text-[#d4a373] tracking-widest uppercase font-medium">Libro Digital Culinario</p>
+                    <h1 class="font-serif text-xl font-bold tracking-wide leading-none">RECETAS DE SIHAM</h1>
+                    <span class="text-xs text-chef-gold uppercase tracking-widest">Colección Culinaria</span>
                 </div>
-            </button>
-
-            <!-- Navigation Actions -->
-            <div class="flex items-center gap-2 md:gap-4">
-                <!-- Index Jump Button -->
-                <button onclick="goToPage(2)" class="px-3 py-1.5 rounded-lg bg-[#322722] hover:bg-[#c85a32] text-xs md:text-sm font-semibold transition-colors flex items-center gap-2 border border-[#d4a373]/30">
-                    <i class="fa-solid fa-list-ul text-[#d4a373]"></i>
-                    <span class="hidden sm:inline">Índice</span>
-                </button>
-
-                <!-- Page Indicator Pill -->
-                <span id="page-indicator" class="text-xs md:text-sm bg-[#c85a32]/20 text-[#d4a373] px-3 py-1.5 rounded-full font-mono font-semibold border border-[#c85a32]/30">
-                    Página 1 / 17
-                </span>
-
-                <!-- Quick Menu Toggle Drawer Button -->
-                <button onclick="toggleMenu()" class="p-2 rounded-lg bg-[#322722] hover:bg-[#42342d] text-[#d4a373] transition-colors focus:outline-none" title="Abrir Menú de Páginas">
-                    <i class="fa-solid fa-bars text-lg"></i>
-                </button>
             </div>
+            <button onclick="goToPage(2)" class="text-sm bg-chef-red hover:bg-[#a64522] px-4 py-2 rounded-lg font-medium transition flex items-center gap-2">
+                <i class="fa-solid fa-book-open"></i> Menú / Índice
+            </button>
         </div>
     </header>
 
-    <div id="side-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity opacity-0">
-        <div class="absolute right-0 top-0 h-full w-80 max-w-full bg-[#1b1512] text-white p-6 shadow-2xl flex flex-col justify-between overflow-y-auto border-l border-[#d4a373]/30">
-            <div>
-                <div class="flex justify-between items-center mb-6 border-b border-[#322722] pb-4">
-                    <h3 class="font-serif text-xl font-bold text-[#d4a373] flex items-center gap-2">
-                        <i class="fa-solid fa-book-bookmark"></i> Navegación
-                    </h3>
-                    <button onclick="toggleMenu()" class="text-gray-400 hover:text-white text-xl p-1">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
+    <!-- Contenido Principal -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-grow w-full">
 
-                <nav class="space-y-1 text-sm font-medium">
-                    <button onclick="goToPage(1)" class="w-full text-left px-3 py-2 rounded-md hover:bg-[#c85a32] transition-colors flex items-center justify-between group">
-                        <span><i class="fa-solid fa-house text-[#d4a373] group-hover:text-white mr-2"></i> 1. Portada Principal</span>
-                        <span class="text-xs opacity-60">Pág 1</span>
-                    </button>
-                    <button onclick="goToPage(2)" class="w-full text-left px-3 py-2 rounded-md hover:bg-[#c85a32] transition-colors flex items-center justify-between group border-b border-[#322722] mb-2 pb-3">
-                        <span><i class="fa-solid fa-utensils text-[#d4a373] group-hover:text-white mr-2"></i> 2. Índice de Platos</span>
-                        <span class="text-xs opacity-60">Pág 2</span>
-                    </button>
-
-                    <div class="text-xs font-semibold text-[#d4a373] uppercase tracking-wider px-3 pt-2 pb-1">Recetas</div>
-                    
-                    <button onclick="goToPage(3)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">3. Tajine de Pollo con Limón</span>
-                        <span class="text-xs text-gray-500">Pág 3</span>
-                    </button>
-                    <button onclick="goToPage(4)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">4. Cuscús 7 Verduras</span>
-                        <span class="text-xs text-gray-500">Pág 4</span>
-                    </button>
-                    <button onclick="goToPage(5)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">5. Sopa Harira Tradicional</span>
-                        <span class="text-xs text-gray-500">Pág 5</span>
-                    </button>
-                    <button onclick="goToPage(6)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">6. Pastilla de Pollo y Almendras</span>
-                        <span class="text-xs text-gray-500">Pág 6</span>
-                    </button>
-                    <button onclick="goToPage(7)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">7. Tajine de Cordero con Ciruelas</span>
-                        <span class="text-xs text-gray-500">Pág 7</span>
-                    </button>
-                    <button onclick="goToPage(8)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">8. Zaalouk de Berenjena</span>
-                        <span class="text-xs text-gray-500">Pág 8</span>
-                    </button>
-                    <button onclick="goToPage(9)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">9. Briouats Crujientes</span>
-                        <span class="text-xs text-gray-500">Pág 9</span>
-                    </button>
-                    <button onclick="goToPage(10)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">10. Baghrir (Crepes)</span>
-                        <span class="text-xs text-gray-500">Pág 10</span>
-                    </button>
-                    <button onclick="goToPage(11)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">11. Pan Msemen Hojaldrado</span>
-                        <span class="text-xs text-gray-500">Pág 11</span>
-                    </button>
-                    <button onclick="goToPage(12)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">12. Pan Batbout Esponjoso</span>
-                        <span class="text-xs text-gray-500">Pág 12</span>
-                    </button>
-                    <button onclick="goToPage(13)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">13. Seffa Medfouna Dulce</span>
-                        <span class="text-xs text-gray-500">Pág 13</span>
-                    </button>
-                    <button onclick="goToPage(14)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">14. Kefta a la Parrilla</span>
-                        <span class="text-xs text-gray-500">Pág 14</span>
-                    </button>
-                    <button onclick="goToPage(15)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">15. Tajine de Pescado Chermoula</span>
-                        <span class="text-xs text-gray-500">Pág 15</span>
-                    </button>
-                    <button onclick="goToPage(16)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">16. Chebakia con Miel</span>
-                        <span class="text-xs text-gray-500">Pág 16</span>
-                    </button>
-                    <button onclick="goToPage(17)" class="w-full text-left px-3 py-1.5 rounded-md hover:bg-[#322722] hover:text-[#d4a373] transition-colors flex items-center justify-between">
-                        <span class="truncate">17. Té Verde a la Menta</span>
-                        <span class="text-xs text-gray-500">Pág 17</span>
-                    </button>
-                </nav>
-            </div>
-
-            <div class="pt-4 border-t border-[#322722] text-xs text-gray-400 text-center">
-                Recetas de Siham &copy; 2026<br>Publicado con GitHub Pages
-            </div>
-        </div>
-    </div>
-
-    <main class="max-w-6xl mx-auto px-4 py-6 md:py-8 flex-grow w-full">
-
-        <!-- ================= PAGE 1: PORTADA PRINCIPAL ================= -->
-        <!-- INSTRUCCIONES GITHUB PAGES: Para cambiar la foto de portada, pon tu imagen en una carpeta llamada "images" con el nombre "portada-chef.jpg" -->
+        <!-- ==================== PÁGINA 1: PORTADA ==================== -->
         <section id="page-1" class="page-slide active">
-            <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-[#1b1512] min-h-[580px] flex items-center justify-center border border-[#d4a373]/30">
-                <!-- Background Image Slot with Graceful Fallback Placeholder -->
-                <div class="absolute inset-0 z-0">
-                    <img id="img-portada" src="images/portada-chef.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1600&q=80';" alt="Portada Chef Siham" class="w-full h-full object-cover opacity-40">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#1b1512] via-[#1b1512]/60 to-transparent"></div>
-                </div>
-
-                <!-- Cover Content Card -->
-                <div class="relative z-10 text-center text-white px-6 py-12 max-w-3xl mx-auto">
-                    <div class="inline-block p-3 rounded-full bg-[#c85a32]/20 border border-[#d4a373]/40 mb-6 backdrop-blur-sm">
-                        <i class="fa-solid fa-hat-chef text-3xl md:text-4xl text-[#d4a373]"></i>
+            <div class="relative bg-chef-dark rounded-3xl overflow-hidden shadow-2xl text-white my-4">
+                <div class="absolute inset-0 opacity-40 bg-cover bg-center" style="background-image: url('images/portada-chef.jpg');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#1b1512] via-[#1b1512]/70 to-transparent"></div>
+                
+                <div class="relative z-10 text-center px-6 py-16 md:py-24 max-w-3xl mx-auto">
+                    <div class="inline-block p-3 rounded-full bg-[#c85a32]/20 border border-chef-gold/40 mb-6 backdrop-blur-sm">
+                        <i class="fa-solid fa-hat-chef text-3xl md:text-4xl text-chef-gold"></i>
                     </div>
-                    <p class="text-[#d4a373] text-sm md:text-base font-semibold tracking-widest uppercase mb-3">Colección de Cocina Tradicional</p>
-                    <h2 class="font-serif text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-6 text-white leading-tight">
+                    <p class="text-chef-gold text-sm md:text-base font-semibold tracking-widest uppercase mb-3">Colección de Cocina Tradicional</p>
+                    <h2 class="font-serif text-4xl sm:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
                         Recetas de Siham
                     </h2>
-                    <div class="w-24 h-1 bg-[#d4a373] mx-auto mb-6 rounded-full"></div>
-                    <p class="text-base sm:text-xl text-gray-300 font-light max-w-xl mx-auto mb-8 leading-relaxed">
-                        Un viaje gastronómico repleto de sabores auténeticos, aromas especiados y secretos culinarios pasados de generación en generación.
+                    <div class="w-24 h-1 bg-chef-gold mx-auto mb-6 rounded-full"></div>
+                    <p class="text-base sm:text-xl text-gray-300 font-light max-w-2xl mx-auto mb-8 leading-relaxed">
+                        Un viaje gastronómico repleto de sabores auténticos, aromas especiados y secretos culinarios pasados de generación en generación.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button onclick="goToPage(2)" class="px-8 py-3.5 bg-[#c85a32] hover:bg-[#a64522] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-base">
+                        <button onclick="goToPage(2)" class="px-8 py-3.5 bg-chef-red hover:bg-[#a64522] text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2">
                             Ver Índice de Platos <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
@@ -246,947 +91,147 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 2: ÍNDICE DE PLATOS ================= -->
+        <!-- ==================== PÁGINA 2: ÍNDICE DE PLATOS ==================== -->
         <section id="page-2" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl border border-[#eae5d9]">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl border border-amber-100">
                 <!-- Header Banner -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-[#eae5d9] pb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b pb-6 border-amber-100">
                     <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Menú Completo</span>
-                        <h2 class="font-serif text-3xl md:text-4xl font-bold text-[#1b1512] mt-1">Índice de Recetas</h2>
+                        <span class="text-xs font-bold uppercase tracking-widest text-chef-red">Menú Completo</span>
+                        <h2 class="font-serif text-3xl md:text-4xl font-bold text-chef-dark mt-1">Índice de Recetas</h2>
                     </div>
-                    <div class="flex items-center gap-3 bg-[#f3ece1] px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-[#964219]">
-                        <i class="fa-solid fa-book-open"></i> 15 Especialidades Culinarias
+                    <div class="flex items-center gap-2 bg-[#f8f2eb] px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-chef-dark">
+                        <i class="fa-solid fa-book-open text-chef-red"></i> 15 Especialidades Culinarias
                     </div>
                 </div>
 
                 <!-- Grid Layout with Chef Banner + 15 Dishes -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     <!-- Chef Thumbnail Side Banner -->
-                    <div class="lg:col-span-4 rounded-xl overflow-hidden bg-[#1b1512] text-white relative shadow-lg group">
+                    <div class="lg:col-span-4 rounded-xl overflow-hidden bg-chef-dark text-white relative shadow-lg group">
                         <div class="h-64 lg:h-96 w-full relative">
-                            <img id="img-indice-chef" src="images/portada-chef.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=800&q=80';" alt="Chef Siham en Cocina" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <img id="img-indice-chef" src="images/portada-chef.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#1b1512] via-transparent to-transparent"></div>
                         </div>
-                        <div class="p-6 relative z-10 -mt-12">
-                            <h3 class="font-serif text-2xl font-bold text-[#d4a373]">Siham</h3>
+                        <div class="p-6 absolute bottom-0 left-0 right-0 z-10">
+                            <h3 class="font-serif text-2xl font-bold text-chef-gold">Siham</h3>
                             <p class="text-xs text-gray-300 mt-1">"La cocina es el arte de compartir el corazón en cada plato."</p>
                         </div>
                     </div>
 
                     <!-- 15 Recipe Cards Grid -->
-                    <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                        <!-- Links generated dynamically to pages 3 through 17 -->
-                        <script>
-                            const dishesIndex = [
-                                "Tajine de Pollo con Limón", "Cuscús 7 Verduras", "Sopa Harira Tradicional",
-                                "Pastilla de Pollo y Almendras", "Tajine de Cordero con Ciruelas", "Zaalouk de Berenjena",
-                                "Briouats Crujientes", "Baghrir (Crepes)", "Pan Msemen Hojaldrado",
-                                "Pan Batbout Esponjoso", "Seffa Medfouna Dulce", "Kefta a la Parrilla",
-                                "Tajine de Pescado Chermoula", "Chebakia con Miel", "Té Verde a la Menta"
-                            ];
-                            // Temporary string output for setup
-                        </script>
-                        
-                        <!-- Manual Render of items for exact page numbers -->
-                        <button onclick="goToPage(3)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">01</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Tajine de Pollo con Limón</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(4)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">02</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Cuscús de Siete Verduras</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(5)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">03</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Sopa Harira Tradicional</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(6)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">04</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Pastilla de Pollo y Almendras</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(7)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">05</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Tajine de Cordero con Ciruelas</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(8)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">06</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Zaalouk de Berenjena</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(9)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">07</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Briouats Crujientes</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(10)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">08</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Baghrir (Crepes 1000 Agujeros)</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(11)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">09</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Pan Msemen Hojaldrado</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(12)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">10</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Pan Batbout Esponjoso</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(13)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">11</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Seffa Medfouna Dulce</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(14)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">12</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Kefta a la Parrilla Especiada</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(15)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">13</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Tajine de Pescado Chermoula</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(16)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">14</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Chebakia Tradicional de Miel</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
-
-                        <button onclick="goToPage(17)" class="text-left p-3.5 bg-white hover:bg-[#f8f4ed] rounded-xl border border-[#eae5d9] hover:border-[#d4a373] transition-all shadow-sm hover:shadow flex items-center justify-between group sm:col-span-2">
-                            <div class="flex items-center gap-3">
-                                <span class="w-7 h-7 rounded-lg bg-[#c85a32]/10 text-[#c85a32] font-bold text-xs flex items-center justify-center group-hover:bg-[#c85a32] group-hover:text-white transition-colors">15</span>
-                                <span class="font-medium text-sm text-[#1b1512]">Té Verde Tradicional a la Menta</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-[#c85a32] group-hover:translate-x-0.5 transition-all"></i>
-                        </button>
+                    <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3" id="dishes-grid">
+                        <!-- Generado Dinámicamente mediante JS -->
                     </div>
                 </div>
             </div>
         </section>
 
-        
-        <!-- PAGE 3: PLATO 1 -->
-        <section id="page-3" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md relative">
-                        <!-- GITHUB PAGES IMAGE SLOT: images/plato-1.jpg -->
-                        <img src="images/plato-1.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541518763669-27fef04b14e8?auto=format&fit=crop&w=800&q=80';" alt="Tajine de Pollo" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">1h 10m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">4 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 01</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Tajine de Pollo con Limón Encurtido y Aceitunas</h2>
-                        
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2">
-                                <i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes
-                            </h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 1 Pollo entero troceado</li>
-                                <li>• 2 Limones encurtidos en sal</li>
-                                <li>• 150g Aceitunas verdes/moradas</li>
-                                <li>• 2 Cebollas grandes picadas</li>
-                                <li>• 3 Dientes de ajo machacados</li>
-                                <li>• Jengibre, azafrán y cúrcuma</li>
-                                <li>• Cilantro y perejil fresco</li>
-                                <li>• Aceite de oliva virgen extra</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2">
-                                <i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso
-                            </h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Marinar el pollo con ajo, hierbas picadas, especias y un hilo de aceite de oliva durante 30 min.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>En el tajín, pochar la cebolla y dorar los trozos de pollo a fuego medio.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Añadir un vaso de agua, tapar y cocer a fuego lento durante 45 minutos.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Incorporar las pieles del limón cortadas en tiras y las aceitunas 10 minutos antes de apagar el fuego hasta reducir la salsa.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 4: PLATO 2 -->
-        <section id="page-4" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <!-- GITHUB PAGES IMAGE SLOT: images/plato-2.jpg -->
-                        <img src="images/plato-2.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80';" alt="Cuscús" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">2h 00m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">6 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Media</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 02</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Cuscús Tradicional de Siete Verduras</h2>
-                        
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 500g Sémola fina de cuscús</li>
-                                <li>• 800g Ternera o cordero</li>
-                                <li>• Calabaza redonda y calabacín</li>
-                                <li>• Zanahorias y nabos blancos</li>
-                                <li>• Col/Repollo y garbanzos cocidos</li>
-                                <li>• Tomate y cebolla madura</li>
-                                <li>• Mantequilla rancia (Smen)</li>
-                                <li>• Pimienta negra, jengibre y azafrán</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Cocinar la carne con las especias, tomate y agua en la parte inferior de la cuscusera.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Hidratar el cuscús con agua y un chorrito de aceite. Trabajar con las manos y poner en el vaporero.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Ir incorporando las verduras al caldo según su tiempo de cocción (primero las duras, al final la calabaza).</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Repetir el vaporizado del cuscús 3 veces lubricando con Smen o mantequilla. Montar la pirámide y bañar con caldo.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 5: PLATO 3 -->
-        <section id="page-5" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <!-- GITHUB PAGES IMAGE SLOT: images/plato-3.jpg -->
-                        <img src="images/plato-3.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80';" alt="Harira" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">1h 20m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">6 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 03</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Sopa Harira Tradicional Nutritiva</h2>
-                        
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 150g Carne de ternera troceada</li>
-                                <li>• 1 Taza de garbanzos remojados</li>
-                                <li>• 1/2 Taza de lentejas marrón</li>
-                                <li>• 1 kg Tomates frescos triturados</li>
-                                <li>• Apio, cilantro y perejil fresco</li>
-                                <li>• 50g Fideos finos de sopa</li>
-                                <li>• Harina diluida en agua (Tadouira)</li>
-                                <li>• Canela, jengibre y pimienta</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Rehogar la carne picada con las hierbas abundante, cebolla y tomates triturados.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Añadir los garbanzos, lentejas, agua abundante y especias. Cocer a fuego medio durante 50 min.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Incorporar la mezcla de harina con agua batiendo constantemente para dar la cremosidad característica.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Añadir los fideos en los últimos 5 minutos de ebullición. Servir muy caliente con limón y dátiles.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 6: PLATO 4 -->
-        <section id="page-6" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <!-- GITHUB PAGES IMAGE SLOT: images/plato-4.jpg -->
-                        <img src="images/plato-4.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80';" alt="Pastilla" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">1h 45m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">8 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Alta</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 04</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Pastilla Fina de Pollo y Almendras</h2>
-                        
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 12 Hojas de Masa Filo/Warga</li>
-                                <li>• 1 kg Pollo entero desmenuzado</li>
-                                <li>• 250g Almendras fritas picadas</li>
-                                <li>• 6 Huevos batidos</li>
-                                <li>• 1kg Cebolla dorada caramelizada</li>
-                                <li>• Canela molida y azúcar glass</li>
-                                <li>• Agua de azahar y mantequilla</li>
-                                <li>• Azafrán puro y jengibre</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Cocinar el pollo con cebolla, especias y desmenuzar. Cuajar la salsa resultante con huevos.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Mezclar las almendras crujientes molidas con azúcar, canela y unas gotas de azahar.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Pincelar las hojas de masa filo con mantequilla y disponer en molde redondo intercalando capas.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Hornear a 180°C hasta dorar. Decorar la superficie formando dibujos con canela y azúcar glass.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGES 7 to 17 Simplified Template Blocks with complete functionality -->
-        <!-- PAGE 7: PLATO 5 -->
-        <section id="page-7" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-5.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80';" alt="Tajine de Cordero" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">2h 15m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">5 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Media</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 05</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Tajine de Cordero con Ciruelas y Almendras</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 1kg Carne de cordero jugosa</li>
-                                <li>• 250g Ciruelas pasas blandas</li>
-                                <li>• 100g Almendras fritas en láminas</li>
-                                <li>• 3 Cucharadas de miel pura</li>
-                                <li>• Canela en rama y molida</li>
-                                <li>• Cebolla, ajo y azafrán</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Dorar la carne de cordero con cebolla picada y especias en el tajín de barro.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Cocer lentamente a fuego muy suave durante hora y media hasta que la carne se desprenda del hueso.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Caramelizar las ciruelas en una cacerola pequeña con almíbar, miel y canela.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Corona el tajín con las ciruelas glaseadas y espolvorear las almendras tostadas por encima.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 8: PLATO 6 -->
-        <section id="page-8" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-6.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80';" alt="Zaalouk" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">35m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">4 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Muy Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 06</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Zaalouk de Berenjena Asada y Tomate</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 2 Berenjenas grandes frescas</li>
-                                <li>• 3 Tomates maduros pelados</li>
-                                <li>• 4 Dientes de ajo picados</li>
-                                <li>• Pimentón dulce y comino</li>
-                                <li>• Cilantro fresco y zumo de limón</li>
-                                <li>• Aceite de oliva virgen extra</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Asar las berenjenas al horno o trocear y hervir hasta que estén suaves.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Sofreír los tomates triturados con ajo, aceite de oliva y las especias.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Añadir las berenjenas y machacar con un tenedor en la sartén a fuego lento.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Cocinar hasta reducir todo el líquido. Aliñar con cilantro fresco y servir templado.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 9: PLATO 7 -->
-        <section id="page-9" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-7.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80';" alt="Briouats" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">50m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">6 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Media</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 07</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Briouats Crujientes de Carne Picada</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 12 Tiras de Masa Filo</li>
-                                <li>• 400g Carne picada de ternera</li>
-                                <li>• 1 Cebolla finamente picada</li>
-                                <li>• Comino, pimentón y canela</li>
-                                <li>• Perejil y 2 huevos duros picados</li>
-                                <li>• Aceite para freír o mantequilla</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Saltear la carne picada con cebolla, especias y hierbas hasta dorar. Mezclar con huevo duro.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Colocar una cucharada de relleno al borde de cada tira de masa filo.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Plegar alternativamente formando triángulos cerrados perfectos.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Freír en aceite muy caliente o hornear a 190°C hasta que estén crujientes y dorados.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 10: PLATO 8 -->
-        <section id="page-10" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-8.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80';" alt="Baghrir" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">30m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">4 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 08</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Baghrir: Crepes de los Mil Agujeros</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 2 Tazas de sémola muy fina</li>
-                                <li>• 1/2 Taza de harina de trigo</li>
-                                <li>• 1 Sobre levadura de panadero</li>
-                                <li>• 1 Sobre levadura química</li>
-                                <li>• 3 Tazas agua templada</li>
-                                <li>• Miel y mantequilla derretida</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Batir todos los ingredientes en licuadora durante 3 minutos hasta obtener masa fluida.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Dejar fermentar la masa tapada durante 15 minutos en sitio templado.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Cocinar en sartén antiadherente caliente a fuego medio sólo por una cara sin dar la vuelta.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Bañar en caliente con una mezcla fluida de miel pura y mantequilla fundida.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 11: PLATO 9 -->
-        <section id="page-11" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-9.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80';" alt="Msemen" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">45m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">4 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Media</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 09</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Pan Msemen Hojaldrado Tradicional</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 300g Harina de fuerza blanca</li>
-                                <li>• 150g Sémola fina de trigo duro</li>
-                                <li>• 1 Cucharadita de sal fina</li>
-                                <li>• Mantequilla blanda y aceite</li>
-                                <li>• Agua templada para amasar</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Amasar bien la harina con sémola y sal hasta obtener una textura elástica. Hacer bolitas.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Estirar cada bola muy fina usando aceite de oliva hasta que sea translúcida.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Pincelar con mantequilla, espolvorear sémola y doblar en forma de cuadrado en varias capas.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Tostar en sartén caliente por ambos lados hasta que esté bien dorado y crujiente.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 12: PLATO 10 -->
-        <section id="page-12" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-10.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80';" alt="Batbout" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">40m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">6 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 10</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Pan Batbout Esponjoso en Sartén</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 250g Harina de trigo blanca</li>
-                                <li>• 250g Sémola fina de trigo duro</li>
-                                <li>• 1 Cucharada levadura fresca</li>
-                                <li>• 1 Cucharadita de azúcar y sal</li>
-                                <li>• Agua tibia para leudar</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Mezclar las harinas con la levadura y amasar bien vertiendo agua tibia progresivamente.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Extender la masa y cortar pequeños discos redondos. Dejar reposar 20 min.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Cocinar en sartén antiadherente caliente sin grasa dando la vuelta para que se infle.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Abrir por la mitad y rellenar con ensaladilla, atún o kefta según preferencia.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 13: PLATO 11 -->
-        <section id="page-13" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-11.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80';" alt="Seffa" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">1h 15m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">6 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Media</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 11</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Seffa Medfouna Dulce con Almendras</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 500g Fideos finos de Seffa</li>
-                                <li>• 150g Almendras peladas frotadas</li>
-                                <li>• 100g Pasas sultanas hidratadas</li>
-                                <li>• Canela molida y azúcar glass</li>
-                                <li>• Mantequilla de vaca de calidad</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Cocer los fideos al vapor en cuscusera con un chorrito de aceite durante 3 pasadas.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Añadir las pasas en la última pasada de vapor para que se hinchen de humedad.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Mezclar en caliente con abundante mantequilla suave y azúcar glass.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Montar en forma de pirámide y decorar con tiras de canela y almendras crujientes.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 14: PLATO 12 -->
-        <section id="page-14" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-12.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=800&q=80';" alt="Kefta" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">30m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">4 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Muy Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 12</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Kefta a la Parrilla Especiada</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 600g Carne picada de ternera/cordero</li>
-                                <li>• 1 Cebolla dulce picada muy fina</li>
-                                <li>• Cilantro fresco y menta picada</li>
-                                <li>• Comino, pimentón y sal fina</li>
-                                <li>• Pinchos o brochetas metálicas</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Amasar bien la carne con las especias, hierbas y cebolla picada.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Moldear la carne alargada alrededor de las brochetas o formando cilindros.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Asar a la parrilla o sartén con carbón durante 3-4 minutos por cada lado.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Servir bien caliente acompañada de pan batbout recién hecho y té a la menta.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 15: PLATO 13 -->
-        <section id="page-15" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-13.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80';" alt="Tajine de Pescado" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">50m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">4 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 13</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Tajine de Pescado a la Chermoula</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 800g Rodajas de pescado blanco</li>
-                                <li>• Majao Chermoula (Ajo, cilantro, comino)</li>
-                                <li>• Rodajas de patata y pimiento rojo</li>
-                                <li>• Tomates maduros en rodajas</li>
-                                <li>• Limón confitado y aceitunas</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Marinar el pescado fresco con la salsa Chermoula durante 30 minutos.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Colocar en el fondo del tajín las patatas y pimientos para hacer de cama.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Poner el pescado encima, regar con el resto de adobo y tapar.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Cocer a fuego medio durante 35 minutos hasta ablandar las verduras.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 16: PLATO 14 -->
-        <section id="page-16" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-14.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80';" alt="Chebakia" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">2h 00m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">10 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Alta</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 14</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Chebakia Tradicional de Miel y Sésamo</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 500g Harina de trigo común</li>
-                                <li>• 1 Taza sésamo molido frito</li>
-                                <li>• Anís, canela y agua de azahar</li>
-                                <li>• Miel natural caliente para baño</li>
-                                <li>• Semillas de sésamo para espolvorear</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Amasar bien los ingredientes hasta tener una masa firme. Cortar en tiras finas.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Plegar entrelazando la masa para formar la figura de flor clásica.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Freír en abundante aceite muy caliente hasta que estén bien doradas.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Sumergir de inmediato en miel tibia y espolvorear con semillas de sésamo.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 17: PLATO 15 -->
-        <section id="page-17" class="page-slide">
-            <div class="bg-cardbg rounded-2xl p-6 md:p-8 shadow-xl border border-[#eae5d9] grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-5 flex flex-col gap-4">
-                    <div class="h-80 lg:h-[420px] rounded-xl overflow-hidden shadow-md">
-                        <img src="images/plato-15.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=800&q=80';" alt="Té Verde Menta" class="w-full h-full object-cover">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs bg-white p-3 rounded-xl border border-[#eae5d9]">
-                        <div><p class="text-gray-500">Tiempo</p><p class="font-bold text-[#1b1512]">15m</p></div>
-                        <div><p class="text-gray-500">Raciones</p><p class="font-bold text-[#1b1512]">4 Pers.</p></div>
-                        <div><p class="text-gray-500">Dificultad</p><p class="font-bold text-[#c85a32]">Muy Fácil</p></div>
-                    </div>
-                </div>
-                <div class="lg:col-span-7 flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#c85a32]">Plato 15</span>
-                        <h2 class="font-serif text-3xl font-bold text-[#1b1512] mt-1 mb-4">Té Verde Tradicional a la Menta</h2>
-                        <div class="mb-6">
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-[#c85a32]"></i> Ingredientes</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 bg-white p-4 rounded-xl border border-[#eae5d9]">
-                                <li>• 2 Cucharadas Té verde Gunpowder</li>
-                                <li>• 1 Manojo grande Menta fresca (Naana)</li>
-                                <li>• 4 Cucharadas Azúcar de pilón o azúcar</li>
-                                <li>• 750ml Agua hirviendo</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-[#1b1512] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-[#c85a32]"></i> Preparación Paso a Paso</h3>
-                            <ol class="space-y-2 text-sm text-gray-700">
-                                <li class="flex gap-3"><span class="step-number">1</span><span>Enjuagar el té verde con agua hirviendo en la tetera para quitar el amargor.</span></li>
-                                <li class="flex gap-3"><span class="step-number">2</span><span>Añadir el azúcar y el agua hirviendo. Dejar infusionar a fuego suave 2 minutos.</span></li>
-                                <li class="flex gap-3"><span class="step-number">3</span><span>Introducir el manojo fresco de menta limpia directamente en la tetera.</span></li>
-                                <li class="flex gap-3"><span class="step-number">4</span><span>Escanciar desde alto varias veces en vaso de cristal para crear la espumilla ideal.</span></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- ==================== PÁGINAS 3 A 17: PLATOS INDIVIDUALES ==================== -->
+        <div id="recipe-pages-container">
+            <!-- Las 15 páginas de recetas se inyectan dinámicamente -->
+        </div>
 
     </main>
 
-    <footer class="sticky bottom-0 z-30 bg-[#1b1512] text-white border-t border-[#d4a373]/30 px-4 py-3 shadow-2xl">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <!-- Prev Button -->
-            <button id="btn-prev" onclick="prevPage()" class="px-4 py-2 rounded-xl bg-[#322722] hover:bg-[#c85a32] text-xs sm:text-sm font-semibold transition-colors flex items-center gap-2 border border-[#d4a373]/30 disabled:opacity-30 disabled:pointer-events-none">
-                <i class="fa-solid fa-arrow-left"></i> Anterior
-            </button>
-
-            <!-- Bottom Direct Quick Jump dropdown -->
-            <div class="flex items-center gap-2">
-                <span class="hidden sm:inline text-xs text-[#d4a373]">Ir a:</span>
-                <select id="page-select" onchange="goToPage(parseInt(this.value))" class="bg-[#322722] text-[#d4a373] text-xs sm:text-sm rounded-lg px-2 py-1.5 border border-[#d4a373]/30 focus:outline-none">
-                    <option value="1">Pág 1: Portada</option>
-                    <option value="2">Pág 2: Índice</option>
-                    <option value="3">Pág 3: Tajine de Pollo</option>
-                    <option value="4">Pág 4: Cuscús 7 Verduras</option>
-                    <option value="5">Pág 5: Sopa Harira</option>
-                    <option value="6">Pág 6: Pastilla de Pollo</option>
-                    <option value="7">Pág 7: Tajine de Cordero</option>
-                    <option value="8">Pág 8: Zaalouk Berenjena</option>
-                    <option value="9">Pág 9: Briouats Crujientes</option>
-                    <option value="10">Pág 10: Baghrir (Crepes)</option>
-                    <option value="11">Pág 11: Pan Msemen</option>
-                    <option value="12">Pág 12: Pan Batbout</option>
-                    <option value="13">Pág 13: Seffa Medfouna</option>
-                    <option value="14">Pág 14: Kefta Parrilla</option>
-                    <option value="15">Pág 15: Tajine Pescado</option>
-                    <option value="16">Pág 16: Chebakia Miel</option>
-                    <option value="17">Pág 17: Té Verde Menta</option>
-                </select>
-            </div>
-
-            <!-- Next Button -->
-            <button id="btn-next" onclick="nextPage()" class="px-4 py-2 rounded-xl bg-[#c85a32] hover:bg-[#a64522] text-xs sm:text-sm font-semibold transition-colors flex items-center gap-2 shadow-md">
-                Siguiente <i class="fa-solid fa-arrow-right"></i>
-            </button>
+    <!-- Footer General -->
+    <footer class="bg-chef-dark text-gray-400 py-6 text-center text-xs border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4">
+            <p>© Recetas de Siham - Todos los derechos reservados.</p>
         </div>
     </footer>
 
+    <!-- JavaScript para Renderizado y Navegación -->
     <script>
-        let currentPage = 1;
-        const totalPages = 17;
+        const recipes = [
+            { id: 1, title: "Tajine de Pollo con Limón", category: "Plato Principal", image: "images/plato-1.jpg", desc: "Clásico tajine marroquí condimentado con jengibre, azafrán, limones en conserva y aceitunas sabrosas." },
+            { id: 2, title: "Cuscús 7 Verduras", category: "Tradicional", image: "images/plato-2.jpg", desc: "Semola al vapor acompañada de una variada selección de verduras frescas y garbanzos tiernos." },
+            { id: 3, title: "Sopa Harira Tradicional", category: "Entrante", image: "images/plato-3.jpg", desc: "Nutritiva sopa de tomate, lentejas, garbanzos, carne y aromáticas hierbas como el cilantro." },
+            { id: 4, title: "Pastilla de Pollo y Almendras", category: "Especialidad", image: "images/plato-4.jpg", desc: "Deliciosa combinación de dulce y salado envuelta en fina masa hojaldrada con canela." },
+            { id: 5, title: "Tajine de Cordero con Ciruelas", category: "Festivo", image: "images/plato-5.jpg", desc: "Tierna carne de cordero cocinada a fuego lento con ciruelas caramelizadas y almendras tostadas." },
+            { id: 6, title: "Zaalouk de Berenjena", category: "Ensalada / Entrante", image: "images/plato-6.jpg", desc: "Ensalada cocida de berenjenas, tomates, ajo, comino y pimentón dulce." },
+            { id: 7, title: "Briouats Crujientes", category: "Aperitivo", image: "images/plato-7.jpg", desc: "Triángulos crujientes rellenos de pollo, carne picada o marisco sazonado." },
+            { id: 8, title: "Baghrir (Crepes Marroquíes)", category: "Repostería", image: "images/plato-8.jpg", desc: "Conocidas como las crepes de mil agujeros, servidas con abundante miel y mantequilla." },
+            { id: 9, title: "Pan Msenen Hojaldrado", category: "Panadería", image: "images/plato-9.jpg", desc: "Pan tradicional cuadrado de textura hojaldrada, perfecto para el desayuno o té." },
+            { id: 10, title: "Pan Batbout Esponjoso", category: "Panadería", image: "images/plato-10.jpg", desc: "Panecillos redondos cocinados a la sartén, ideales para rellenar." },
+            { id: 11, title: "Seffa Medfouna Dulce", category: "Postre / Festivo", image: "images/plato-11.jpg", desc: "Fideos finos al vapor adornados con canela, azúcar glas y almendras picadas." },
+            { id: 12, title: "Kefta a la Parrilla", category: "Carnes", image: "images/plato-12.jpg", desc: "Carne picada sazonada con especias tradicionales, cebolla y perejil fresco." },
+            { id: 13, title: "Tajine de Pescado Chermoula", category: "Pescados", image: "images/plato-13.jpg", desc: "Pescado fresco marinando en chermoula con pimientos, tomates y rodajas de limón." },
+            { id: 14, title: "Chebakia con Miel", category: "Dulces Tradicionales", image: "images/plato-14.jpg", desc: "Dulce frito con sésamo, aromatizado con agua de azahar y bañado en miel pura." },
+            { id: 15, title: "Té Verde a la Menta", category: "Bebida", image: "images/plato-15.jpg", desc: "La legendaria bebida de hospitalidad marroquí con menta fresca y té verde." }
+        ];
 
-        function updatePagination() {
-            // Hide all pages
-            for (let i = 1; i <= totalPages; i++) {
-                const p = document.getElementById(`page-${i}`);
-                if (p) {
-                    p.classList.remove('active');
-                }
-            }
-
-            // Show active page
-            const activePage = document.getElementById(`page-${currentPage}`);
-            if (activePage) {
-                activePage.classList.add('active');
-            }
-
-            // Update top page pill
-            document.getElementById('page-indicator').textContent = `Página ${currentPage} / ${totalPages}`;
-            
-            // Update dropdown menu
-            document.getElementById('page-select').value = currentPage;
-
-            // Enable/disable navigation buttons
-            document.getElementById('btn-prev').disabled = (currentPage === 1);
-            
-            const nextBtn = document.getElementById('btn-next');
-            if (currentPage === totalPages) {
-                nextBtn.innerHTML = 'Inicio <i class="fa-solid fa-rotate-right"></i>';
-            } else {
-                nextBtn.innerHTML = 'Siguiente <i class="fa-solid fa-arrow-right"></i>';
-            }
-
-            // Scroll to top of main content on page switch
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function goToPage(pageNum) {
-            if (pageNum >= 1 && pageNum <= totalPages) {
-                currentPage = pageNum;
-                updatePagination();
-            } else if (pageNum > totalPages) {
-                currentPage = 1;
-                updatePagination();
-            }
-            
-            // Close drawer if open
-            const drawer = document.getElementById('side-drawer');
-            if (!drawer.classList.contains('hidden')) {
-                toggleMenu();
+        // Función para cambiar de página
+        function goToPage(pageNumber) {
+            document.querySelectorAll('.page-slide').forEach(page => {
+                page.classList.remove('active');
+            });
+            const targetPage = document.getElementById(`page-${pageNumber}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        function nextPage() {
-            if (currentPage < totalPages) {
-                currentPage++;
-            } else {
-                currentPage = 1;
-            }
-            updatePagination();
-        }
+        // Inicializar Renderizado del Índice y Páginas de Platos
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.getElementById('dishes-grid');
+            const pagesContainer = document.getElementById('recipe-pages-container');
 
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                updatePagination();
-            }
-        }
+            recipes.forEach((dish, index) => {
+                const targetPageIndex = index + 3; // Páginas 3 a 17
 
-        function toggleMenu() {
-            const drawer = document.getElementById('side-drawer');
-            if (drawer.classList.contains('hidden')) {
-                drawer.classList.remove('hidden');
-                setTimeout(() => drawer.classList.add('opacity-100'), 10);
-            } else {
-                drawer.classList.remove('opacity-100');
-                setTimeout(() => drawer.classList.add('hidden'), 300);
-            }
-        }
+                // 1. Inyectar botón en el Índice (Página 2)
+                const buttonHtml = `
+                    <button onclick="goToPage(${targetPageIndex})" class="text-left p-3.5 bg-gray-50 hover:bg-[#f8f2eb] rounded-xl border border-gray-100 hover:border-chef-gold/50 transition duration-200 flex items-center justify-between group shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-lg bg-chef-red/10 text-chef-red font-bold text-xs flex items-center justify-center group-hover:bg-chef-red group-hover:text-white transition">
+                                ${dish.id}
+                            </span>
+                            <span class="font-medium text-sm text-chef-dark group-hover:text-chef-red transition">${dish.title}</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-xs text-gray-400 group-hover:text-chef-red group-hover:translate-x-1 transition"></i>
+                    </button>
+                `;
+                gridContainer.innerHTML += buttonHtml;
 
-        // Initialize state on window load
-        window.onload = function() {
-            updatePagination();
-        };
+                // 2. Inyectar Vista Detallada del Plato (Páginas 3 a 17)
+                const pageHtml = `
+                    <section id="page-${targetPageIndex}" class="page-slide">
+                        <div class="bg-white rounded-2xl p-6 sm:p-10 shadow-xl border border-amber-100">
+                            <!-- Navegación superior del plato -->
+                            <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+                                <button onclick="goToPage(2)" class="text-xs sm:text-sm font-semibold text-chef-red hover:underline flex items-center gap-2">
+                                    <i class="fa-solid fa-arrow-left"></i> Volver al Índice
+                                </button>
+                                <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Receta ${dish.id} de 15</span>
+                            </div>
+
+                            <!-- Contenido del Plato -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                <div class="rounded-2xl overflow-hidden shadow-lg border border-gray-100 h-64 sm:h-80 bg-gray-100">
+                                    <img src="${dish.image}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'" alt="${dish.title}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="space-y-4">
+                                    <span class="inline-block px-3 py-1 bg-chef-gold/15 text-chef-red text-xs font-bold rounded-full uppercase tracking-wider">
+                                        ${dish.category}
+                                    </span>
+                                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-chef-dark">${dish.title}</h2>
+                                    <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
+                                        ${dish.desc}
+                                    </p>
+                                    <div class="pt-4 border-t border-gray-100 flex gap-3">
+                                        ${dish.id > 1 ? `<button onclick="goToPage(${targetPageIndex - 1})" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-chef-dark text-xs font-semibold rounded-lg transition"><i class="fa-solid fa-chevron-left mr-1"></i> Anterior</button>` : ''}
+                                        ${dish.id < 15 ? `<button onclick="goToPage(${targetPageIndex + 1})" class="px-4 py-2 bg-chef-red hover:bg-[#a64522] text-white text-xs font-semibold rounded-lg transition">Siguiente <i class="fa-solid fa-chevron-right ml-1"></i></button>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                `;
+                pagesContainer.innerHTML += pageHtml;
+            });
+        });
     </script>
 </body>
 </html>
